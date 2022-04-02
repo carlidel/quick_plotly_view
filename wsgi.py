@@ -10,7 +10,8 @@ import plotly.graph_objects as go
 # import pillow
 from PIL import Image
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[
+                dbc.themes.BOOTSTRAP])
 application = app.server
 
 cache = Cache(app.server, config={
