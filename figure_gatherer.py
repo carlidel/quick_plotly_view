@@ -5,7 +5,9 @@ PATH = "/eos/user/c/camontan/definitive_dyn_indicators/figs"
 def check_file_path(path: str) -> str:
     # check if the file exists
     # if not, raise a ValueError
+    print(path)
     if not os.path.exists(path):
+        print("File does not exist")
         raise ValueError(f"File {path} does not exist")
     return path
 
@@ -25,7 +27,7 @@ def path_gatherer(
         out_path = os.path.join(PATH, subpath, f"performance_{dynamic_indicator}_z_{zoom}.jpg")
 
     elif plot_kind == "histogram":
-        out_path = os.path.join(PATH, subpath, f"histogram_{dynamic_indicator}.jpg")
+        out_path = os.path.join(PATH, subpath, f"{dynamic_indicator}_histogram.jpg")
 
     else:# plot_kind == "colormap":
         out_path = os.path.join(PATH, subpath, "colormap/stable_colormaps.jpg")

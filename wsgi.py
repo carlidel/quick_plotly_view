@@ -65,13 +65,21 @@ PLOT_KIND_LIST = [
     {'label': 'Histogram', 'value': "histogram"},
 ]
 
+ZOOM_LIST = [
+    {'label': '[0.50 - 1.0]', 'value': '0.5'},
+    {'label': '[0.75 - 1.0]', 'value': '0.75'},
+    {'label': '[0.90 - 1.0]', 'value': '0.9'},
+    {'label': '[0.95 - 1.0]', 'value': '0.95'},
+    {'label': '[0.99 - 1.0]', 'value': '0.99'},
+]
+
 picker_1 = [dcc.Dropdown(
     id={'type': 'picker_1', 'index': i},
     options=OMEGA_LIST,
     value=OMEGA_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
 
 picker_2 = [dcc.Dropdown(
     id={'type': 'picker_2', 'index': i},
@@ -79,7 +87,7 @@ picker_2 = [dcc.Dropdown(
     value=EPSILON_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
 
 picker_3 = [dcc.Dropdown(
     id={'type': 'picker_3', 'index': i},
@@ -87,7 +95,7 @@ picker_3 = [dcc.Dropdown(
     value=MU_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
 
 picker_4 = [dcc.Dropdown(
     id={'type': 'picker_4', 'index': i},
@@ -95,7 +103,7 @@ picker_4 = [dcc.Dropdown(
     value=KERNEL_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
 
 picker_5 = [dcc.Dropdown(
     id={'type': 'picker_5', 'index': i},
@@ -103,7 +111,7 @@ picker_5 = [dcc.Dropdown(
     value=DYNAMIC_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
 
 picker_6 = [dcc.Dropdown(
     id={'type': 'picker_6', 'index': i},
@@ -111,12 +119,20 @@ picker_6 = [dcc.Dropdown(
     value=PLOT_KIND_LIST[0]['value'],
     clearable=False,
     multi=False
-) for i in range(4)]
+) for i in range(6)]
+
+picker_7 = [dcc.Dropdown(
+    id={'type': 'picker_7', 'index': i},
+    options=ZOOM_LIST,
+    value=ZOOM_LIST[0]['value'],
+    clearable=False,
+    multi=False
+) for i in range(6)]
 
 figures = [dcc.Graph(
     id={'type': 'figure', 'index': i},
     figure={'data': [], 'layout': {}}
-) for i in range(4)]
+) for i in range(6)]
 
 blocks = [
     dbc.Col([
@@ -135,6 +151,8 @@ blocks = [
                 picker_5[i],
                 dbc.Label("Plot Kind Picker"),
                 picker_6[i],
+                dbc.Label("Zoom level Picker\n(for performance plots)"),
+                picker_7[i],
             #]),
         ], width=2),
         dbc.Col([
@@ -142,7 +160,7 @@ blocks = [
         ])
         ])
     ])
-for i in range(4)]
+for i in range(6)]
 
 app.layout = html.Div([
     dbc.Toast(
@@ -159,7 +177,7 @@ app.layout = html.Div([
         dbc.Row([
             dbc.Col([
                 dbc.Label("Zoom scale:"),
-                dcc.Slider(min=0.05, max=2.0, step=0.05, value=0.2, id='Scale', tooltip={
+                dcc.Slider(min=0.05, max=2.0, step=0.05, value=0.5, id='Scale', tooltip={
                            "placement": "bottom", "always_visible": True})
             ])
         ]),
@@ -170,6 +188,10 @@ app.layout = html.Div([
         dbc.Row([
             blocks[2],
             blocks[3],
+        ]),
+        dbc.Row([
+            blocks[4],
+            blocks[5],
         ])
     ]), 
 ])
@@ -197,6 +219,7 @@ def open_toast(figure):
         Input({'type': 'picker_5', 'index': MATCH}, 'value'),
         Input({'type': 'picker_6', 'index': MATCH}, 'value'),
         Input('Scale', 'value'),
+        Input({'type': 'picker_7', 'index': MATCH}, 'value'),
     ]
 )
 @cache.memoize(timeout=CACHE_TIMEOUT)
@@ -209,13 +232,17 @@ def update_fig(*args):
     plot_kind = args[5]
 
     print(kernel)
-    figpath = path_gatherer(omegas, epsilon, mu, dynamic, plot_kind, zoom=None, kernel=kernel)
+    figpath = path_gatherer(omegas=omegas, epsilon=epsilon, mu=mu, dynamic_indicator=dynamic, plot_kind=plot_kind, zoom=args[7], kernel=kernel)
+    print("figpath:", figpath)
 
     # open the jpeg at figpath and get the size in pixel
     img = Image.open(figpath)
     img_width, img_height = img.size
     scale_factor = args[6]
     fig = go.Figure()
+
+    img_width = 1920
+    img_height = 1080
 
     # Add invisible scatter trace.
     # This trace is added to help the autoresize logic work.
@@ -252,7 +279,7 @@ def update_fig(*args):
             yref="y",
             opacity=1.0,
             layer="below",
-            sizing="stretch",
+            sizing="contain",
             source=img)
     )
 
