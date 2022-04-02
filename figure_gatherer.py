@@ -1,6 +1,6 @@
 import os
 
-PATH = "/eos/project/d/da-and-diffusion-studies/DA_Studies/Simulations/Models/dynamic_indicator_analysis/big_data/figs"
+PATH = "/eos/user/c/camontan/definitive_dyn_indicators/figs"
 
 def check_file_path(path: str) -> str:
     # check if the file exists
