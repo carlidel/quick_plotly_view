@@ -129,9 +129,13 @@ picker_7 = [dcc.Dropdown(
     multi=False
 ) for i in range(6)]
 
-figures = [dcc.Graph(
+figures = [dcc.Loading(
+    id=f"loading-{i}",
+    type="default",
+    children=dcc.Graph(
     id={'type': 'figure', 'index': i},
     figure={'data': [], 'layout': {}}
+    )
 ) for i in range(6)]
 
 blocks = [
@@ -163,16 +167,6 @@ blocks = [
 for i in range(6)]
 
 app.layout = html.Div([
-    dbc.Toast(
-        [html.P("Image(s) loaded/reshaped successfully!", className="mb-0")],
-        id="auto-toast",
-        header="Notification",
-        icon="primary",
-        duration=2000,
-        is_open=False,
-        style={"position": "fixed", "top": 1, "right": 10, "width": 350},
-        dismissable=True,
-    ),
     dbc.Col([
         dbc.Row([
             dbc.Col([
@@ -200,15 +194,6 @@ app.layout = html.Div([
 
 from figure_gatherer import path_gatherer
 
-@app.callback(
-    Output("auto-toast", "is_open"),
-    Input({'type': 'figure', 'index': ALL}, 'figure')
-)
-def open_toast(figure):
-    if figure is not None:
-        return True
-    return False
-
 # @cache.memoize(timeout=CACHE_TIMEOUT)
 @app.callback(
     Output({'type': 'figure', 'index': MATCH}, 'figure'),
@@ -234,9 +219,7 @@ def update_fig(*args):
     fig = go.Figure()
 
     try:
-        print(kernel)
         figpath = path_gatherer(omegas=omegas, epsilon=epsilon, mu=mu, dynamic_indicator=dynamic, plot_kind=plot_kind, zoom=args[7], kernel=kernel)
-        print("figpath:", figpath)
     except Exception:
         return fig
 
