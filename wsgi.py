@@ -209,6 +209,7 @@ def open_toast(figure):
         return True
     return False
 
+# @cache.memoize(timeout=CACHE_TIMEOUT)
 @app.callback(
     Output({'type': 'figure', 'index': MATCH}, 'figure'),
     [
@@ -222,7 +223,6 @@ def open_toast(figure):
         Input({'type': 'picker_7', 'index': MATCH}, 'value'),
     ]
 )
-@cache.memoize(timeout=CACHE_TIMEOUT)
 def update_fig(*args):
     omegas = args[0]
     epsilon = args[1]
@@ -231,8 +231,6 @@ def update_fig(*args):
     dynamic = args[4]
     plot_kind = args[5]
     
-    img_width = 1920
-    img_height = 1080
     fig = go.Figure()
 
     try:
@@ -247,6 +245,8 @@ def update_fig(*args):
     img_width, img_height = img.size
     scale_factor = args[6]
 
+    img_width = 1920
+    img_height = 1080
     
     # Add invisible scatter trace.
     # This trace is added to help the autoresize logic work.
