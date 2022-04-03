@@ -170,7 +170,7 @@ app.layout = html.Div([
         icon="primary",
         duration=2000,
         is_open=False,
-        style={"position": "fixed", "top": 10, "right": 10, "width": 350},
+        style={"position": "fixed", "top": 1, "right": 10, "width": 350},
         dismissable=True,
     ),
     dbc.Col([
@@ -230,20 +230,24 @@ def update_fig(*args):
     kernel = args[3]
     dynamic = args[4]
     plot_kind = args[5]
+    
+    img_width = 1920
+    img_height = 1080
+    fig = go.Figure()
 
-    print(kernel)
-    figpath = path_gatherer(omegas=omegas, epsilon=epsilon, mu=mu, dynamic_indicator=dynamic, plot_kind=plot_kind, zoom=args[7], kernel=kernel)
-    print("figpath:", figpath)
+    try:
+        print(kernel)
+        figpath = path_gatherer(omegas=omegas, epsilon=epsilon, mu=mu, dynamic_indicator=dynamic, plot_kind=plot_kind, zoom=args[7], kernel=kernel)
+        print("figpath:", figpath)
+    except Exception:
+        return fig
 
     # open the jpeg at figpath and get the size in pixel
     img = Image.open(figpath)
     img_width, img_height = img.size
     scale_factor = args[6]
-    fig = go.Figure()
 
-    img_width = 1920
-    img_height = 1080
-
+    
     # Add invisible scatter trace.
     # This trace is added to help the autoresize logic work.
     fig.add_trace(
