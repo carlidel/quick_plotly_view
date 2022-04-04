@@ -69,7 +69,7 @@ PLOT_KIND_LIST = [
 ]
 
 ZOOM_LIST = [
-    {'label': '[0.00 - 1.0]', 'value': '0.00'},
+    {'label': '[0.00 - 1.0]', 'value': '0.0'},
     {'label': '[0.25 - 1.0]', 'value': '0.25'},
     {'label': '[0.50 - 1.0]', 'value': '0.5'},
     {'label': '[0.75 - 1.0]', 'value': '0.75'},
@@ -129,7 +129,7 @@ picker_6 = [dcc.Dropdown(
 picker_7 = [dcc.Dropdown(
     id={'type': 'picker_7', 'index': i},
     options=ZOOM_LIST,
-    value=ZOOM_LIST[0]['value'],
+    value=ZOOM_LIST[3]['value'],
     clearable=False,
     multi=False
 ) for i in range(6)]
