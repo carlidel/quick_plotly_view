@@ -20,11 +20,20 @@ def path_gatherer(
     zoom=None,
     kernel=None,
 ) -> str:
-    subpath = f"{omegas}/{epsilon}_{mu}" if kernel == "none" else f"{omegas}/{epsilon}_{mu}/{kernel}"
+    subpath = f"{omegas}/{epsilon}_{mu}" if kernel == "none" or plot_kind == "convolution_performance" else f"{omegas}/{epsilon}_{mu}/{kernel}"
     print(subpath)
     
     if plot_kind == "performance":
         out_path = os.path.join(PATH, subpath, f"performance_{dynamic_indicator}_z_{zoom}.jpg")
+
+    elif plot_kind == "convolution_performance":
+        out_path = os.path.join(PATH, subpath, f"convolution_performance_{dynamic_indicator}_z_{zoom}.jpg")
+    
+    elif plot_kind == "a_posteriori_comparison":
+        out_path = os.path.join(PATH, subpath, f"all_a_posteriori_performance_{dynamic_indicator}_z_{zoom}.jpg")
+
+    elif plot_kind == "a_priori_comparison":
+        out_path = os.path.join(PATH, subpath, f"all_a_priori_performance_{dynamic_indicator}_z_{zoom}.jpg")
 
     elif plot_kind == "histogram":
         out_path = os.path.join(PATH, subpath, f"{dynamic_indicator}_histogram.jpg")

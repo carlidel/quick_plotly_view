@@ -62,10 +62,15 @@ DYNAMIC_LIST = [
 PLOT_KIND_LIST = [
     {'label': 'Colormap', 'value': "colormap"},
     {'label': 'Performance', 'value': "performance"},
+    {'label': 'Convolution Performance', 'value': "convolution_performance"},
+    {'label': 'All A Posteriori performances', 'value': "a_posteriori_comparison"},
+    {'label': 'All A Priori performances', 'value': "a_priori_comparison"},
     {'label': 'Histogram', 'value': "histogram"},
 ]
 
 ZOOM_LIST = [
+    {'label': '[0.00 - 1.0]', 'value': '0.00'},
+    {'label': '[0.25 - 1.0]', 'value': '0.25'},
     {'label': '[0.50 - 1.0]', 'value': '0.5'},
     {'label': '[0.75 - 1.0]', 'value': '0.75'},
     {'label': '[0.90 - 1.0]', 'value': '0.9'},
