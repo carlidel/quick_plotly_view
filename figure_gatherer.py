@@ -30,10 +30,10 @@ def path_gatherer(
         out_path = os.path.join(PATH, subpath, f"convolution_performance_{dynamic_indicator}_z_{zoom}.jpg")
     
     elif plot_kind == "a_posteriori_comparison":
-        out_path = os.path.join(PATH, subpath, f"all_a_posteriori_performance_{dynamic_indicator}_z_{zoom}.jpg")
+        out_path = os.path.join(PATH, subpath, f"all_a_posteriori_performance__z_{zoom}.jpg")
 
     elif plot_kind == "a_priori_comparison":
-        out_path = os.path.join(PATH, subpath, f"all_a_priori_performance_{dynamic_indicator}_z_{zoom}.jpg")
+        out_path = os.path.join(PATH, subpath, f"all_a_priori_performance__z_{zoom}.jpg")
 
     elif plot_kind == "histogram":
         out_path = os.path.join(PATH, subpath, f"{dynamic_indicator}_histogram.jpg")
